@@ -8,9 +8,14 @@ class User
 {
 	protected $id;
 	protected $first_name;
+	protected $middle_name;
 	protected $last_name;
 	protected $email;
 	protected $pass;
+	protected $birthdate;
+	protected $gender;
+	protected $address;
+	protected $contact_numebr;
 	protected $created_at;
 
 	public function getId()
@@ -28,6 +33,11 @@ class User
 		return $this->first_name;
 	}
 
+	public function getMiddleName()
+	{
+		return $this->middle_name;
+	}
+
 	public function getLastName()
 	{
 		return $this->last_name;
@@ -36,6 +46,26 @@ class User
 	public function getEmail()
 	{
 		return $this->email;
+	}
+
+	public function getBirthDate()
+	{
+		return $this->birthdate;
+	}
+
+	public function getGender()
+	{
+		return $this->gender;
+	}
+
+	public function getAddress()
+	{
+		return $this->address;
+	}
+
+	public function getContactNumber()
+	{
+		return $this->contact_number;
 	}
 
 	public static function getById($id)
@@ -97,7 +127,7 @@ class User
 		return null;
 	}
 
-	public static function register($first_name, $last_name, $email, $password)
+	public static function register($first_name, $middle_name, $last_name, $email, $pass, $password, $birthdate, $gender, $address, $contact_number)
 	{
 		global $conn;
 
@@ -106,8 +136,8 @@ class User
 			// ..
 
 			$sql = "
-				INSERT INTO users (first_name, last_name, email, pass)
-				VALUES ('$first_name', '$last_name', '$email', '$password')
+				INSERT INTO users (first_name, middle_name, last_name, email, pass, birthdate, gender, address, contact_number)
+				VALUES ('$first_name', '$middle_name', '$last_name', '$email','$pass', '$birthdate', '$gender', '$address', '$contact_number')
 			";
 			$conn->exec($sql);
 			// echo "<li>Executed SQL query " . $sql;
@@ -132,9 +162,15 @@ class User
 					INSERT INTO users
 					SET
 						first_name=\"{$user['first_name']}\",
+						middle_name=\"{$user['middle_name']}\",
 						last_name=\"{$user['last_name']}\",
 						email=\"{$user['email']}\",
-						pass=\"{$user['pass']}\"
+						pass=\"{$user['pass']}\",
+						password=\"{$user['password']}\",
+						birthdate=\"{$user['birthdate']}\",
+						gender=\"{$user['gender']}\",
+						address=\"{$user['address']}\",
+						contact_number=\"{$user['contact_number']}\",
 				";
 				$conn->exec($sql);
 				// echo "<li>Executed SQL query " . $sql;

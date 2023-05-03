@@ -23,12 +23,12 @@ if (isset($_SESSION['is_logged_in'])) {
 <form action="attempt-login.php" method="POST">
 	<div>
 		<label>Email Address</label>
-		<input type="email" name="email" placeholder="email@address.com" />	
+		<input type="email" name="email" placeholder="email@address.com" />
 	</div>
 	<div>
 		<label>Password</label>
-		<input type="password" name="password" />	
-	</div>
+		<input type="password" name="password" />
+	</div> <br>	
 	<div>
 		<button>
 			Login

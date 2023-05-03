@@ -8,10 +8,30 @@ use App\User;
 
 try {
 	$first_name = $_POST['first_name'];
+	$middle_name = $_POST['middle_name'];
 	$last_name = $_POST['last_name'];
+	$gender = $_POST['gender'];
+	$birthdate = $_POST['birthdate'];
+	$address = $_POST['address'];
+	$contact_number = $_POST['contact_number'];
 	$email = $_POST['email'];
 	$password = $_POST['password'];
-	$result = User::register($first_name, $last_name, $email, $password);
+	$password = $_POST['confirm_password'];
+
+	if ($_POST['password']!=$_POST['confirm_password']){
+		header("Refresh:0; url=register.php");
+
+
+	}
+	
+	else{
+		
+		$result = User::register($first_name, $middle_name, $last_name, $gender, $birthdate, $address, $contact_number, $email, $password);
+
+	}
+
+	
+	
 
 	if ($result) {
 
@@ -20,7 +40,7 @@ try {
 		$_SESSION['is_logged_in'] = true;
 		$_SESSION['user'] = [
 			'id' => $result,
-			'fullname' => $first_name . ' ' . $last_name,
+			'fullname' => $first_name . ' ' . $middle_name . ' ' . $last_name,
 			'email' => $email
 		];
 		header('Location: index.php');
@@ -30,4 +50,3 @@ try {
 	error_log($e->getMessage());
 	echo "<h1 style='color: red'>" . $e->getMessage() . "</h1>";
 }
-
