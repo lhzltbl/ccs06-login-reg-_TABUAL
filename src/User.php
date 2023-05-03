@@ -10,12 +10,12 @@ class User
 	protected $first_name;
 	protected $middle_name;
 	protected $last_name;
+	protected $gender;
+	protected $birthdate;
+	protected $address;
+	protected $contact_number;
 	protected $email;
 	protected $pass;
-	protected $birthdate;
-	protected $gender;
-	protected $address;
-	protected $contact_numebr;
 	protected $created_at;
 
 	public function getId()
@@ -25,7 +25,7 @@ class User
 
 	public function getFullName()
 	{
-		return $this->first_name . ' ' . $this->last_name;
+		return $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name;
 	}
 
 	public function getFirstName()
@@ -43,19 +43,14 @@ class User
 		return $this->last_name;
 	}
 
-	public function getEmail()
+	public function getGender()
 	{
-		return $this->email;
+		return $this->gender;
 	}
 
 	public function getBirthDate()
 	{
 		return $this->birthdate;
-	}
-
-	public function getGender()
-	{
-		return $this->gender;
 	}
 
 	public function getAddress()
@@ -66,6 +61,11 @@ class User
 	public function getContactNumber()
 	{
 		return $this->contact_number;
+	}
+
+	public function getEmail()
+	{
+		return $this->email;
 	}
 
 	public static function getById($id)
@@ -93,9 +93,7 @@ class User
 
 	public static function hashPassword($password)
 	{
-		$hashed_password = null;
-		// DO SOMETHING HERE TO HASH THE PASSWORD
-		// ...
+		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 		return $hashed_password;
 	}
 
@@ -107,19 +105,20 @@ class User
 			$sql = "
 				SELECT * FROM users
 				WHERE email=:email
-					AND pass=:pass
 				LIMIT 1
 			";
 			$statement = $conn->prepare($sql);
-
-			// Perform password hash verification (if necessary)
-
 			$statement->execute([
 				'email' => $email,
-				'pass' => $pass
 			]);
-			$result = $statement->fetchObject('App\User');
-			return $result;
+			$user = $statement->fetchObject('App\User');
+		
+			if ($user && password_verify($pass, User::hashPassword($pass))) {
+				$pass = User::hashPassword($pass);
+				return $user;
+			}
+
+			
 		} catch (PDOException $e) {
 			error_log($e->getMessage());
 		}
@@ -127,18 +126,18 @@ class User
 		return null;
 	}
 
-	public static function register($first_name, $middle_name, $last_name, $email, $pass, $password, $birthdate, $gender, $address, $contact_number)
+	public static function register($first_name, $middle_name, $last_name, $email, $password, $birthdate, $gender, $address, $contact_number)
 	{
 		global $conn;
+		
 
 		try {
-			// Hash the password before inserting it to DB
-			// ..
-
+			$hashed_password = self::hashPassword($password);
 			$sql = "
-				INSERT INTO users (first_name, middle_name, last_name, email, pass, birthdate, gender, address, contact_number)
-				VALUES ('$first_name', '$middle_name', '$last_name', '$email','$pass', '$birthdate', '$gender', '$address', '$contact_number')
+				INSERT INTO users (first_name, middle_name, last_name, email, pass, password, birthdate, gender, address, contact_number)
+				VALUES ('$first_name', '$middle_name', '$last_name', '$email', '$pass', '$password', '$birthdate', '$gender', '$address','$contact_number')
 			";
+
 			$conn->exec($sql);
 			// echo "<li>Executed SQL query " . $sql;
 			return $conn->lastInsertId();
@@ -155,22 +154,18 @@ class User
 
 		try {
 			foreach ($users as $user) {
-				// Hash the password before inserting it to DB
-				// ..
-
 				$sql = "
 					INSERT INTO users
 					SET
 						first_name=\"{$user['first_name']}\",
 						middle_name=\"{$user['middle_name']}\",
 						last_name=\"{$user['last_name']}\",
-						email=\"{$user['email']}\",
-						pass=\"{$user['pass']}\",
-						password=\"{$user['password']}\",
-						birthdate=\"{$user['birthdate']}\",
 						gender=\"{$user['gender']}\",
+						birthdate=\"{$user['birthdate']}\",
 						address=\"{$user['address']}\",
 						contact_number=\"{$user['contact_number']}\",
+						email=\"{$user['email']}\",
+						pass=\"{$user['pass']}\"
 				";
 				$conn->exec($sql);
 				// echo "<li>Executed SQL query " . $sql;
@@ -181,5 +176,5 @@ class User
 		}
 
 		return false;
-	}
+	}	
 }

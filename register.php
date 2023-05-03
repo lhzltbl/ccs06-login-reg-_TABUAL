@@ -10,58 +10,53 @@
 
 <form action="save-registration.php" method="POST">
 	<div>
-		<label>First Name:</label>
-		<input type="text" name="first_name" placeholder="First Name" />	
-	</div> <br>
-
+		<label>First Name</label>
+		<input type="text" name="first_name" placeholder="First Name" required/>	
+	</div><br>
 	<div>
-		<label>Last Name:</label>
-		<input type="text" name="middle_name" placeholder="Middle Name" />	
-	</div> <br>
-
+		<label>Middle Name</label>
+		<input type="text" name="middle_name" placeholder="Middle Name" optional/>	
+	</div><br>
 	<div>
-		<label>Last Name:</label>
-		<input type="text" name="last_name" placeholder="Last Name" />	
-	</div> <br>
-
+		<label>Last Name</label>
+		<input type="text" name="last_name" placeholder="Last Name" required/>	
+	</div><br>
 	<div>
-		<label>Email Address:</label>
-		<input type="email" name="email" placeholder="email@address.com" />	
-	</div> <br>
-
+		<label>Email Address</label>
+		<input type="email" name="email" placeholder="email@address.com" required/>	
+	</div><br>
 	<div>
-		<label>Password:</label>
-		<input type="password" name="password" />	
-	</div> <br>
-
+		<label>Password</label>
+		<input type="password" name="password" minlength="8" required/>	
+	</div><br>
 	<div>
-		<label>Confirm Password:</label>
+		<label>Confirm Password</label>
 		<input type="password" name="confirm_password" />	
-	</div> <br>
-
+	</div><br>
 	<div>
-		<label>Birthdate:</label>
-		<input type="date" name="birthdate" placeholder="Birthdate" />	
-	</div> <br>
-
+		<label>Birthdate</label>
+		<input type="date" name="birthdate" />	
+	</div><br>
 	<div>
-	<label>Gender:</label>
-        <select name="gender">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-        </select>
-	</div> <br>
-
+	<label>Gender</label>
+	<input type="radio" name="gender"
+<?php if (isset($gender) && $gender=="female") echo "checked";?>
+value="female">Female
+<input type="radio" name="gender"
+<?php if (isset($gender) && $gender=="male") echo "checked";?>
+value="male">Male
+<input type="radio" name="gender"
+<?php if (isset($gender) && $gender=="other") echo "checked";?>
+value="other">Other
+	</div><br>
 	<div>
-		<label>Address:</label>
-		<input type="text" name="address" placeholder="Address" />	
-	</div> <br>
-
+		<label>Address</label>
+		<input type="text" name="address" placeholder="Your Address" />	
+	</div><br>
 	<div>
-		<label>Contact Number:</label>
-		<input type="text" name="contact_number" placeholder="+639" />	
-	</div> <br>
-
+		<label>Contact Number</label>
+		<input type="text" name="contact_number" placeholder="Your Mobile No." />	
+	</div><br>
 	<div>
 		<button>
 			Register User
